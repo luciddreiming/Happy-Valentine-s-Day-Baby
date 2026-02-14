@@ -155,17 +155,14 @@ function renderGallery() {
       <div class="gallery" id="galleryContainer">
         <div class="gallery-item" data-video="1">
           <video src="vid/1.mp4" muted loop></video>
-        Please click the link if the video don't play: https://drive.google.com/file/d/1b5OjAN8QuU8z4G1Ocjwo4eWp6XP3lpIp/view?usp=drive_link
           <div class="video-error hidden" style="font-size:0.9rem; margin-top:10px; color:#9e1e40;"></div>
         </div>
         <div class="gallery-item" data-video="2">
           <video src="vid/2.mp4" muted loop></video>
-        Please click the link if the video don't play: https://drive.google.com/file/d/1IVSgkDcei6Us6fBKvXT4_Z60qQYVYnFG/view?usp=drive_link
           <div class="video-error hidden" style="font-size:0.9rem; margin-top:10px; color:#9e1e40;"></div>
         </div>
         <div class="gallery-item" data-video="3">
           <video src="vid/3.mp4" muted loop></video>
-        Please click the link if the video don't play: https://drive.google.com/file/d/1px-4K6JHIW9AqWXeo657C3APPIuZOum9/view?usp=drive_link
           <div class="video-error hidden" style="font-size:0.9rem; margin-top:10px; color:#9e1e40;"></div>
         </div>
       </div>
@@ -890,3 +887,4 @@ window.onload = () => {
     clearTimeout(c);
   }, 1000);
 };
+
