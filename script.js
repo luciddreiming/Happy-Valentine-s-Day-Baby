@@ -9,6 +9,14 @@ const State = {
   jokesQIndex: 0,
 };
 
+// Video links for error messages
+const VideoLinks = {
+  vid1: "https://drive.google.com/file/d/1b5OjAN8QuU8z4G1Ocjwo4eWp6XP3lpIp/view?usp=drive_link",
+  vid2: "https://drive.google.com/file/d/1IVSgkDcei6Us6fBKvXT4_Z60qQYVYnFG/view?usp=drive_link",
+  vid3: "https://drive.google.com/file/d/1px-4K6JHIW9AqWXeo657C3APPIuZOum9/view?usp=drive_link",
+  vid4: "https://drive.google.com/file/d/1sqGdOYczUmHttEenNiCPVBN9MidJ71Ey/view?usp=drive_link"
+};
+
 // ==================== RENDER FUNCTIONS ====================
 
 function renderLogin() {
@@ -44,7 +52,6 @@ function renderMath() {
       <div class="timer-message" id="mathTimerMsg">
         Welcome to my presentation, my Valentine baby!!<br>
         You'll have to answer some basic questions, such as simple math, facts about me, and a few simple jokes. Each set has a reward, so you've got to answer them all. Good luck, baby. I know you've got this.<br>
-        Please click next to continue, baby<br>
         <span style="font-size:2rem; display:block; margin-top:15px;">⏳ 5s ...</span>
       </div>
       <div id="mathQuestionsArea" class="hidden"></div>
@@ -145,23 +152,26 @@ function renderMathReward() {
 function renderGallery() {
   return `
     <div class="page" style="text-align: center;">
-      <h2>📸 memory gallery 📸</h2>
       <div class="gallery" id="galleryContainer">
         <div class="gallery-item" data-video="1">
           <video src="vid/1.mp4" muted loop></video>
-          🎬 Memory 1
+        Please click the link if the video don't play: https://drive.google.com/file/d/1b5OjAN8QuU8z4G1Ocjwo4eWp6XP3lpIp/view?usp=drive_link
+          <div class="video-error hidden" style="font-size:0.9rem; margin-top:10px; color:#9e1e40;"></div>
         </div>
         <div class="gallery-item" data-video="2">
           <video src="vid/2.mp4" muted loop></video>
-          🎬 Memory 2
+        Please click the link if the video don't play: https://drive.google.com/file/d/1IVSgkDcei6Us6fBKvXT4_Z60qQYVYnFG/view?usp=drive_link
+          <div class="video-error hidden" style="font-size:0.9rem; margin-top:10px; color:#9e1e40;"></div>
         </div>
         <div class="gallery-item" data-video="3">
           <video src="vid/3.mp4" muted loop></video>
-          🎬 Memory 3
+        Please click the link if the video don't play: https://drive.google.com/file/d/1px-4K6JHIW9AqWXeo657C3APPIuZOum9/view?usp=drive_link
+          <div class="video-error hidden" style="font-size:0.9rem; margin-top:10px; color:#9e1e40;"></div>
         </div>
       </div>
       <div id="galleryVideoArea" class="hidden">
         <video controls class="video-player" id="selectedVideo" src=""></video>
+        <div id="galleryVideoErrorMessage" class="foot-note hidden"></div>
       </div>
       <div class="foot-note">If you already satisfy on the gift, you may click "Next to proceed on the next game"</div>
       <button class="btn" id="galleryNextBtn">Next ➡️</button>
@@ -601,11 +611,87 @@ function renderVideoPage() {
   return `
     <div class="page" style="text-align: center;">
       <h2>💖 final video gift 💖</h2>
-      <video controls class="video-player" src="vid/4.mp4"></video>
+      <video controls class="video-player" id="finalVideo" src="vid/4.mp4"></video>
+      <div id="finalVideoErrorMessage" class="foot-note hidden"></div>
+        Please click the link if the video don't play: https://drive.google.com/file/d/1sqGdOYczUmHttEenNiCPVBN9MidJ71Ey/view?usp=drive_link
       <div class="foot-note">Thank you for playing! 💕</div>
       <button class="btn" id="backToLoginBtn">play again</button>
     </div>
   `;
+}
+
+// ==================== VIDEO ERROR HANDLING ====================
+
+function setupVideoErrorHandling() {
+  // Gallery page videos
+  if (State.currentPage === 'galleryPage') {
+    const video1 = document.querySelector('.gallery-item[data-video="1"] video');
+    const video2 = document.querySelector('.gallery-item[data-video="2"] video');
+    const video3 = document.querySelector('.gallery-item[data-video="3"] video');
+    
+    if (video1) {
+      video1.addEventListener('error', () => {
+        const errorDiv = video1.closest('.gallery-item').querySelector('.video-error');
+        if (errorDiv) {
+          errorDiv.classList.remove('hidden');
+          errorDiv.innerHTML = `📺 Video unavailable<br>Please click the link: <a href="${VideoLinks.vid1}" target="_blank" style="color: #ff4d6d; word-break: break-all;">View Memory 1</a>`;
+        }
+      });
+    }
+    
+    if (video2) {
+      video2.addEventListener('error', () => {
+        const errorDiv = video2.closest('.gallery-item').querySelector('.video-error');
+        if (errorDiv) {
+          errorDiv.classList.remove('hidden');
+          errorDiv.innerHTML = `📺 Video unavailable<br>Please click the link: <a href="${VideoLinks.vid2}" target="_blank" style="color: #ff4d6d; word-break: break-all;">View Memory 2</a>`;
+        }
+      });
+    }
+    
+    if (video3) {
+      video3.addEventListener('error', () => {
+        const errorDiv = video3.closest('.gallery-item').querySelector('.video-error');
+        if (errorDiv) {
+          errorDiv.classList.remove('hidden');
+          errorDiv.innerHTML = `📺 Video unavailable<br>Please click the link: <a href="${VideoLinks.vid3}" target="_blank" style="color: #ff4d6d; word-break: break-all;">View Memory 3</a>`;
+        }
+      });
+    }
+    
+    // Selected video in gallery
+    const selectedVideo = document.getElementById('selectedVideo');
+    if (selectedVideo) {
+      selectedVideo.addEventListener('error', () => {
+        const errorMsg = document.getElementById('galleryVideoErrorMessage');
+        if (errorMsg) {
+          errorMsg.classList.remove('hidden');
+          const videoSrc = selectedVideo.src;
+          if (videoSrc.includes('vid/1.mp4')) {
+            errorMsg.innerHTML = `📺 Video unavailable<br>Please click the link: <a href="${VideoLinks.vid1}" target="_blank" style="color: #ff4d6d;">View Memory 1 on Google Drive</a>`;
+          } else if (videoSrc.includes('vid/2.mp4')) {
+            errorMsg.innerHTML = `📺 Video unavailable<br>Please click the link: <a href="${VideoLinks.vid2}" target="_blank" style="color: #ff4d6d;">View Memory 2 on Google Drive</a>`;
+          } else if (videoSrc.includes('vid/3.mp4')) {
+            errorMsg.innerHTML = `📺 Video unavailable<br>Please click the link: <a href="${VideoLinks.vid3}" target="_blank" style="color: #ff4d6d;">View Memory 3 on Google Drive</a>`;
+          }
+        }
+      });
+    }
+  }
+  
+  // Final video page
+  if (State.currentPage === 'videoPage') {
+    const finalVideo = document.getElementById('finalVideo');
+    if (finalVideo) {
+      finalVideo.addEventListener('error', () => {
+        const errorMsg = document.getElementById('finalVideoErrorMessage');
+        if (errorMsg) {
+          errorMsg.classList.remove('hidden');
+          errorMsg.innerHTML = `📺 Final video unavailable<br>Please click the link: <a href="${VideoLinks.vid4}" target="_blank" style="color: #ff4d6d;">View Final Gift on Google Drive</a>`;
+        }
+      });
+    }
+  }
 }
 
 // ==================== MAIN RENDER ====================
@@ -636,6 +722,9 @@ function render() {
   }
   
   attachEvents();
+  
+  // Setup video error handling after rendering
+  setTimeout(setupVideoErrorHandling, 100);
 }
 
 // ==================== EVENT BINDING ====================
@@ -693,16 +782,27 @@ function attachEvents() {
     const items = document.querySelectorAll('.gallery-item');
     const videoArea = document.getElementById('galleryVideoArea');
     const videoPlayer = document.getElementById('selectedVideo');
+    const errorMsg = document.getElementById('galleryVideoErrorMessage');
+    
     items.forEach(item => {
       item.addEventListener('click', () => {
         const videoEl = item.querySelector('video');
         if (videoEl && videoPlayer) {
+          // Hide previous error message
+          if (errorMsg) errorMsg.classList.add('hidden');
+          
+          // Set video source
           videoPlayer.src = videoEl.currentSrc || videoEl.src;
           videoArea?.classList.remove('hidden');
-          videoPlayer.play().catch(()=>{});
+          
+          // Try to play
+          videoPlayer.play().catch(() => {
+            // If play fails, error event will trigger
+          });
         }
       });
     });
+    
     document.getElementById('galleryNextBtn')?.addEventListener('click', () => {
       State.currentPage = 'allAbout';
       render();
